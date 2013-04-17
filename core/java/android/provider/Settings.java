@@ -3905,6 +3905,15 @@ public final class Settings {
           */
          public static final String LOCKSCREEN_BATTERY_INFO = "lockscreen_battery_info";
  
+       /**
+        * MediaScanner behavior on boot.
+        * 0 = enabled
+        * 1 = ask (notification)
+        * 2 = disabled
+        * @hide
+        */
+        public static final String MEDIA_SCANNER_ON_BOOT = "media_scanner_on_boot";
+
         /**
          * Network traffic indicator, goes from least to greatest significant bitwise
          * 0 = Display up-stream traffic if set
