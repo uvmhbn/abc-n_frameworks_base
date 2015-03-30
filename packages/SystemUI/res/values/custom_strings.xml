@@ -121,4 +121,7 @@
     <!-- No navigation warning notification -->
     <string name="no_navigation_warning_title">All navigation methods disabled</string>
     <string name="no_navigation_warning_text">Tap to enable</string>
+
+    <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_data_connection_HP">HSPA+</string>
 </resources>
