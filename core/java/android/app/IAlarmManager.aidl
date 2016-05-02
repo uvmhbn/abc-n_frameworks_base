@@ -37,4 +37,11 @@ interface IAlarmManager {
     void remove(in PendingIntent operation, in IAlarmListener listener);
     long getNextWakeFromIdleTime();
     AlarmManager.AlarmClockInfo getNextAlarmClock(int userId);
+<<<<<<< HEAD
+=======
+    // blocked alarms support
+    String getSeenAlarms();
+    // update the uids being synchronized by network socket request manager
+    void updateBlockedUids(int uid, boolean isBlocked);
+>>>>>>> 552a768... Enable NSRM (Network Socket Request Manager).
 }

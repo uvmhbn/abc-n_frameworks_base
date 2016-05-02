@@ -69,4 +69,6 @@ interface IPowerManager
     // sets the delai after which to check the proximity to decide whether
     // to wake the device
     void wakeUpWithProximityCheck(long time, String reason, String opPackageName);
+    // update the uids being synchronized by network socket request manager
+    void updateBlockedUids(int uid, boolean isBlocked);
 }
