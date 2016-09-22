@@ -4075,6 +4075,12 @@ public final class Settings {
         public static final String RECENT_PANEL_GRAVITY = "recent_panel_gravity";
 
         /**
+         * Whether to control brightness from status bar
+         * @hide
+         */
+        public static final String STATUS_BAR_BRIGHTNESS_CONTROL = "status_bar_brightness_control";
+
+        /**
          * Size of recent panel view in percent (default = 100).
          * @hide
          */
