@@ -66,6 +66,7 @@ import com.android.systemui.qs.tiles.NightDisplayTile;
 import com.android.systemui.qs.tiles.NavigationBarTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.VolumeTile;
+import com.android.systemui.qs.tiles.SyncTile;
 import com.android.systemui.qs.tiles.UserTile;
 import com.android.systemui.qs.tiles.WifiTile;
 import com.android.systemui.qs.tiles.WorkModeTile;
@@ -459,6 +460,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (tileSpec.equals("nfc")) return new NfcTile(this);
         else if (tileSpec.equals("compass")) return new CompassTile(this);
         else if (tileSpec.equals("high_brightness") && mHighBrightnessSupported) return new HighBrightnessTile(this);
+        else if (tileSpec.equals("sync")) return new SyncTile(this);
         // Intent tiles.
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
         else if (tileSpec.startsWith(CustomTile.PREFIX)) return CustomTile.create(this,tileSpec);
