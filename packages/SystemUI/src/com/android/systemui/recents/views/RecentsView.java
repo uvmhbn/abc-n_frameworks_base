@@ -405,7 +405,7 @@ public class RecentsView extends FrameLayout {
                     mFloatingButton.getLayoutParams();
             params.topMargin = 2*(mContext.getResources().
                 getDimensionPixelSize(com.android.internal.R.dimen.status_bar_height));
-            params.gravity = Gravity.TOP | Gravity.RIGHT;
+            params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
             mFloatingButton.setLayoutParams(params);
         } else {
             mFloatingButton.setVisibility(View.GONE);

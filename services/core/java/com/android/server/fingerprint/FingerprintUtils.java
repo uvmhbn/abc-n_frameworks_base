@@ -73,14 +73,14 @@ public class FingerprintUtils {
     }
 
     public static void vibrateFingerprintError(Context context) {
-        Vibrator vibrator = context.getSystemService(Vibrator.class);
+        Vibrator vibrator = null; //context.getSystemService(Vibrator.class);
         if (vibrator != null) {
             vibrator.vibrate(FP_ERROR_VIBRATE_PATTERN, -1);
         }
     }
 
     public static void vibrateFingerprintSuccess(Context context) {
-        Vibrator vibrator = context.getSystemService(Vibrator.class);
+        Vibrator vibrator = null; //context.getSystemService(Vibrator.class);
         if (vibrator != null) {
             vibrator.vibrate(FP_SUCCESS_VIBRATE_PATTERN, -1);
         }
