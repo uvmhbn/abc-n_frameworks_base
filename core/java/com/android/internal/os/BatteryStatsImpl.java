@@ -9556,7 +9556,7 @@ public class BatteryStatsImpl extends BatteryStats {
             // level to a now very high level).
             boolean reset = false;
             if (!mNoAutoReset && (oldStatus == BatteryManager.BATTERY_STATUS_FULL
-                    || level >= 90
+                    || level >= 79
                     || (mDischargeCurrentLevel < 20 && level >= 80)
                     || (getHighDischargeAmountSinceCharge() >= 200
                             && mHistoryBuffer.dataSize() >= MAX_HISTORY_BUFFER))) {
