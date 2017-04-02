@@ -3912,7 +3912,7 @@ public final class Settings {
         * 2 = disabled
         * @hide
         */
-        public static final String MEDIA_SCANNER_ON_BOOT = "media_scanner_on_boot";
+        public static final String PREF_MEDIA_SCANNER_ON_BOOT = "media_scanner_on_boot";
 
         /**
          * Network traffic indicator, goes from least to greatest significant bitwise
