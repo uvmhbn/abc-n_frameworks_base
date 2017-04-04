@@ -100,7 +100,7 @@
 
     <!-- The default tiles to display in QuickSettings -->
     <string name="quick_settings_tiles_default" translatable="false">
-        wifi,cell,battery,dnd,flashlight,rotation,bt,airplane,location
+        wifi,cell,battery,dnd,flashlight,rotation,bt,airplane
     </string>
 
     <!-- Tiles native to System UI. Order should match "quick_settings_tiles_default" -->
@@ -283,5 +283,12 @@
     <string name="config_navBarLayout" translatable="false">space,back;home;recent,menu_ime</string>
 
     <bool name="quick_settings_show_full_alarm">false</bool>
+
+    <!-- Whether to show a warning notification when the device reaches a certain temperature. -->
+    <integer name="config_showTemperatureWarning">0</integer>
+
+    <!-- Temp at which to show a warning notification if config_showTemperatureWarning is true.
+         If < 0, uses the value from HardwarePropertiesManager#getDeviceTemperatures. -->
+    <integer name="config_warningTemperature">-1</integer>
 
 </resources>
