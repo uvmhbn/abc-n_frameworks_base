@@ -509,40 +509,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
     };
 
-    class SettingsObserver extends ContentObserver {
-        SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observe() {
-            ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL), false, this,
-                    UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.SCREEN_BRIGHTNESS_MODE), false, this,
-                    UserHandle.USER_ALL);
-            update();
-        }
-
-        @Override
-        public void onChange(boolean selfChange, Uri uri) {
-            update();
-        }
-
-        public void update() {
-            ContentResolver resolver = mContext.getContentResolver();
-            int mode = Settings.System.getIntForUser(mContext.getContentResolver(),
-                            Settings.System.SCREEN_BRIGHTNESS_MODE,
-                            Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL,
-                            UserHandle.USER_CURRENT);
-            mAutomaticBrightness = mode != Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL;
-            mBrightnessControl = Settings.System.getIntForUser(
-                    resolver, Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0,
-                    UserHandle.USER_CURRENT) == 1;
-        }
-    }
-
     // ensure quick settings is disabled until the current user makes it through the setup wizard
     private boolean mUserSetup = false;
     private ContentObserver mUserSetupObserver = new ContentObserver(new Handler()) {
@@ -629,6 +595,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
                   Settings.System.STATUSBAR_CLOCK_STYLE),
                   false, this, UserHandle.USER_ALL);
+            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL),
+		  false, this, UserHandle.USER_ALL);
+            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SCREEN_BRIGHTNESS_MODE),
+		  false, this, UserHandle.USER_ALL);
             updateAll();
         }
 
@@ -664,6 +636,16 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         mClockLocation = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.STATUSBAR_CLOCK_STYLE, 0, UserHandle.USER_CURRENT);
+
+        int mode = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.SCREEN_BRIGHTNESS_MODE,
+                        Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL,
+                        UserHandle.USER_CURRENT);
+        mAutomaticBrightness = mode != Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL;
+        mBrightnessControl = Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+		Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0,
+                UserHandle.USER_CURRENT) == 1;
     }
 
     private SettingsObserver mObserver = new SettingsObserver(mHandler);
