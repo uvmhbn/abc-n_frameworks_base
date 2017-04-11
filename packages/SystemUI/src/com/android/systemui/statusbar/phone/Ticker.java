@@ -22,12 +22,15 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.media.MediaMetadata;
 import android.os.Handler;
 import android.service.notification.StatusBarNotification;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.Interpolator;
 import android.view.View;
 import android.widget.ImageSwitcher;
 import android.widget.TextSwitcher;
@@ -166,19 +169,27 @@ public abstract class Ticker {
         final int imageBounds = res.getDimensionPixelSize(R.dimen.status_bar_icon_drawing_size);
         mIconScale = (float)imageBounds / (float)outerBounds;
 
+        AlphaAnimation animationIn = new AlphaAnimation(0.0f, 1.0f);
+        Interpolator interpolatorIn = AnimationUtils.loadInterpolator(context,
+                android.R.interpolator.decelerate_quad);
+        animationIn.setInterpolator(interpolatorIn);
+        animationIn.setDuration(350);
+
+        AlphaAnimation animationOut = new AlphaAnimation(1.0f, 0.0f);
+        Interpolator interpolatorOut = AnimationUtils.loadInterpolator(context,
+                android.R.interpolator.accelerate_quad);
+        animationIn.setInterpolator(interpolatorOut);
+        animationOut.setDuration(350);
+
         mIconSwitcher = (ImageSwitcher) tickerLayout.findViewById(R.id.tickerIcon);
-        mIconSwitcher.setInAnimation(
-                AnimationUtils.loadAnimation(context, com.android.internal.R.anim.push_up_in));
-        mIconSwitcher.setOutAnimation(
-                AnimationUtils.loadAnimation(context, com.android.internal.R.anim.push_up_out));
+        mIconSwitcher.setInAnimation(animationIn);
+        mIconSwitcher.setOutAnimation(animationOut);
         mIconSwitcher.setScaleX(mIconScale);
         mIconSwitcher.setScaleY(mIconScale);
 
         mTextSwitcher = (TextSwitcher) tickerLayout.findViewById(R.id.tickerText);
-        mTextSwitcher.setInAnimation(
-                AnimationUtils.loadAnimation(context, com.android.internal.R.anim.push_up_in));
-        mTextSwitcher.setOutAnimation(
-                AnimationUtils.loadAnimation(context, com.android.internal.R.anim.push_up_out));
+        mTextSwitcher.setInAnimation(animationIn);
+        mTextSwitcher.setOutAnimation(animationOut);
 
         mDarkModeFillColor = context.getColor(R.color.dark_mode_icon_color_dual_tone_fill);
         mLightModeFillColor = context.getColor(R.color.light_mode_icon_color_dual_tone_fill);
@@ -191,9 +202,20 @@ public abstract class Ticker {
     }
 
 
-    public void addEntry(StatusBarNotification n) {
+    public void addEntry(StatusBarNotification n, boolean isMusic, MediaMetadata mediaMetaData) {
         int initialCount = mSegments.size();
         ContentResolver resolver = mContext.getContentResolver();
+
+        if (isMusic) {
+            CharSequence artist = mediaMetaData.getText(MediaMetadata.METADATA_KEY_ARTIST);
+            CharSequence album = mediaMetaData.getText(MediaMetadata.METADATA_KEY_ALBUM);
+            CharSequence title = mediaMetaData.getText(MediaMetadata.METADATA_KEY_TITLE);
+            if (artist != null && album != null && title != null) {
+                n.getNotification().tickerText = artist.toString() + " - " + album.toString() + " - " + title.toString();
+            } else {
+                return;
+            }
+        }
 
         // If what's being displayed has the same text and icon, just drop it
         // (which will let the current one finish, this happens when apps do

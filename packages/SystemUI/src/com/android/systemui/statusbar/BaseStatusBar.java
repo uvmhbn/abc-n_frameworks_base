@@ -44,6 +44,7 @@ import android.database.ContentObserver;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
+import android.media.MediaMetadata;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -2431,7 +2432,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected abstract void haltTicker();
     protected abstract void setAreThereNotifications();
     protected abstract void updateNotifications();
-    protected abstract void tick(StatusBarNotification n, boolean firstTime);
+    protected abstract void tick(StatusBarNotification n, boolean firstTime, boolean isMusic, MediaMetadata mediaMetaData);
     public abstract boolean shouldDisableNavbarGestures();
 
     public abstract void addNotification(StatusBarNotification notification,
@@ -2537,7 +2538,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         // Restart the ticker if it's still running
         if (updateTicker && isForCurrentUser) {
             haltTicker();
-            tick(notification, false);
+            tick(notification, false, false, null);
           }
 
         setAreThereNotifications();
@@ -2610,7 +2611,19 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     protected boolean shouldPeek(Entry entry, StatusBarNotification sbn) {
-        if (!mUseHeadsUp || isDeviceInVrMode() || !mHeadsUpUserEnabled) {
+        final ActivityManager am = (ActivityManager)
+            mContext.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager.RunningTaskInfo foregroundApp = null;
+        List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
+        if (tasks != null && !tasks.isEmpty()) {
+            foregroundApp = tasks.get(0);
+        }
+        boolean isDialerForegroundApp = foregroundApp != null &&
+                foregroundApp.baseActivity.getPackageName().toLowerCase().contains("dialer");
+        boolean isNotificationFromDialer = sbn.getPackageName().toLowerCase().contains("dialer");
+
+        boolean alwaysHeadsUpForThis = !isDialerForegroundApp && isNotificationFromDialer;
+        if (!mUseHeadsUp || isDeviceInVrMode() || (!mHeadsUpUserEnabled && !alwaysHeadsUpForThis)) {
             return false;
         }
 
