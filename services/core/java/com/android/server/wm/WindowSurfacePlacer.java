@@ -241,7 +241,6 @@ class WindowSurfacePlacer {
                 if (++mLayoutRepeatCount < 6) {
                     requestTraversal();
                 } else {
-                    Slog.e(TAG, "Performed 6 layouts in a row. Skipping");
                     mLayoutRepeatCount = 0;
                 }
             } else {
@@ -655,8 +654,6 @@ class WindowSurfacePlacer {
                 if (repeats < LAYOUT_REPEAT_THRESHOLD) {
                     performLayoutLockedInner(displayContent, repeats == 1,
                             false /* updateInputWindows */);
-                } else {
-                    Slog.w(TAG, "Layout repeat skipped after too many iterations");
                 }
 
                 // FIRST AND ONE HALF LOOP: Make WindowManagerPolicy think
