@@ -4095,7 +4095,7 @@ public final class Settings {
         public static final String RECENT_PANEL_EXPANDED_MODE = "recent_panel_expanded_mode";
 
         /**
-         * Recent panel: Show topmost task
+         * Recent panel: Show topmost task try something out
          *
          * @hide
          */
