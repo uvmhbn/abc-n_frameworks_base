@@ -118,4 +118,7 @@
     <!-- accessibility label for button to open running apps prefscreen [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_running_services">Open Running Services screen.</string>
 
+    <!-- No navigation warning notification -->
+    <string name="no_navigation_warning_title">All navigation methods disabled</string>
+    <string name="no_navigation_warning_text">Tap to enable</string>
 </resources>
