@@ -225,6 +225,8 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected boolean mHeadsUpTicker = false;
     protected boolean mDisableNotificationAlerts = false;
 
+    private boolean mIsNavNotificationShowing = false;
+
     protected DevicePolicyManager mDevicePolicyManager;
     protected IDreamManager mDreamManager;
     protected PowerManager mPowerManager;
@@ -306,7 +308,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     private void showNavigationNotification(boolean show) {
         NotificationManager noMan = (NotificationManager)
                 mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (show) {
+        if (show && !mIsNavNotificationShowing) {
             Intent intent = new Intent(ACTION_ENABLE_NAVIGATION_KEY);
             intent.addFlags(Intent.FLAG_FROM_BACKGROUND);
             intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
@@ -324,8 +326,10 @@ public abstract class BaseStatusBar extends SystemUI implements
                     .setVisibility(Notification.VISIBILITY_PUBLIC)
                     .setContentIntent(pendingIntent)
                     .build();
+            mIsNavNotificationShowing = true;
             noMan.notify(R.string.no_navigation_warning_title, notification);
-        } else {
+        } else if (mIsNavNotificationShowing) {
+            mIsNavNotificationShowing = false;
             noMan.cancel(R.string.no_navigation_warning_title);
         }
     }
@@ -347,20 +351,18 @@ public abstract class BaseStatusBar extends SystemUI implements
             updateLockscreenNotificationSetting();
 
             // Show notification when no navigation method enabled
-            boolean notificationEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+            boolean navNotificationEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
                     Settings.System.NO_NAVIGATION_NOTIFICATION, 1,
                     UserHandle.USER_CURRENT) != 0;
-            if (notificationEnabled) {
-                boolean hasNavbar = DUActionUtils.hasNavbarByDefault(mContext);
-                boolean navbarDisabled = Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                        Settings.Secure.NAVIGATION_BAR_VISIBLE, (hasNavbar ? 1 : 0),
-                        UserHandle.USER_CURRENT) == 0;
-                /*boolean hwKeysDisabled = Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                        Settings.Secure.HARDWARE_KEYS_DISABLE, (hasNavbar ? 1 : 0),
-                        UserHandle.USER_CURRENT) != 0;*/
-                showNavigationNotification((hasNavbar && navbarDisabled)/* ||
-                        (!hasNavbar && hwKeysDisabled && navbarDisabled)*/);
-            }
+            boolean hasNavbar = DUActionUtils.hasNavbarByDefault(mContext);
+            boolean navbarDisabled = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                    Settings.Secure.NAVIGATION_BAR_VISIBLE, (hasNavbar ? 1 : 0),
+                    UserHandle.USER_CURRENT) == 0;
+            /*boolean hwKeysDisabled = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                    Settings.Secure.HARDWARE_KEYS_DISABLE, (hasNavbar ? 1 : 0),
+                    UserHandle.USER_CURRENT) != 0;*/
+            showNavigationNotification((hasNavbar && navbarDisabled && navNotificationEnabled)/* ||
+                    (!hasNavbar && hwKeysDisabled && navbarDisabled && navNotificationEnabled)*/);
         }
 
         @Override
