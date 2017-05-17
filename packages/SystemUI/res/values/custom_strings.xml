@@ -140,5 +140,7 @@
     <string name="accessibility_quick_settings_sync_changed_off">Sync turned off</string>
     <string name="accessibility_quick_settings_sync_changed_on">Sync turned on</string>
 
-
+    <!-- No navigation warning notification -->
+    <string name="no_navigation_warning_title">All navigation methods disabled</string>
+    <string name="no_navigation_warning_text">Tap to enable</string>
 </resources>

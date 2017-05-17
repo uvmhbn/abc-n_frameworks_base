@@ -53,4 +53,7 @@
     <string name="recents_multiwin_nolastapp">Hai rimosso tutti i recenti, seleziona una app dalla home o il drawer.</string>
 
     <string name="recents_killapp_warning">Tap lungo per killare l\'app</string>
+
+    <string name="no_navigation_warning_title">Barra di navigazione non attiva</string>
+    <string name="no_navigation_warning_text">Tappa qui per attivare</string>
 </resources>

@@ -4129,6 +4129,24 @@ public final class Settings {
         public static final String QS_FOOTER_WARNINGS = "qs_footer_warnings";
 
         /**
+         * Whether to launch default music player when headset plugged in
+         * 0 = don't do anything (default)
+         * 1 = launch only on wired connection
+         * 2 = launch only on bt connection but no carkit
+         * 3 = launch only on bt connection
+         * 4 = launch on both connection types but no carkit
+         * 5 = launch on both connection types
+         * @hide
+         */
+        public static final String HEADSET_CONNECT_PLAYER = "headset_connect_player";
+
+        /**
+         * Whether to enable the no navigation method notification.
+         * @hide
+         */
+        public static final String NO_NAVIGATION_NOTIFICATION = "no_navigation_notification";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -7117,13 +7135,6 @@ public final class Settings {
          * @hide
          */
         public static final String BATTERY_TILE_STYLE = "battery_tile_style";
-
-        /**
-         * Battery icon color while charging
-         *
-         * @hide
-         */
-        public static final String STATUS_BAR_CHARGE_COLOR = "status_bar_charge_color";
 
         /**
          * Charging symbol near battery text percentage
