@@ -115,6 +115,7 @@ import android.view.IRotationWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.Surface;
 import android.view.ThreadedRenderer;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -443,6 +444,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     int mLinger;
     int mInitialTouchX;
     int mInitialTouchY;
+    private boolean mFingerprintQuickPulldown;
 
     // for disabling the status bar
     int mDisabled1 = 0;
@@ -604,6 +606,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
                   Settings.System.QS_FOOTER_WARNINGS),
                   false, this, UserHandle.USER_ALL);
+            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                  Settings.System.AMBIENT_DOZE_CUSTOM_BRIGHTNESS),
+                  false, this, UserHandle.USER_ALL);
+            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                  Settings.System.STATUS_BAR_QUICK_QS_PULLDOWN_FP),
+                  false, this, UserHandle.USER_ALL);
             updateAll();
         }
 
@@ -648,6 +656,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mContext.getContentResolver(),
 		Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0,
                 UserHandle.USER_CURRENT) == 1;
+        int defaultDozeBrightness = mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_screenBrightnessDoze);
+        int customDozeBrightness = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.AMBIENT_DOZE_CUSTOM_BRIGHTNESS, defaultDozeBrightness, UserHandle.USER_CURRENT);
+        StatusBarWindowManager.updateSbCustomBrightnessDozeValue(customDozeBrightness);
+        mFingerprintQuickPulldown =  Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_QUICK_QS_PULLDOWN_FP, 0, UserHandle.USER_CURRENT) == 1;
     }
 
     private SettingsObserver mObserver = new SettingsObserver(mHandler);
@@ -3038,20 +3053,32 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         // Panels are not available in setup
         if (!mUserSetup) return;
 
-        if (KeyEvent.KEYCODE_SYSTEM_NAVIGATION_UP == key) {
-            MetricsLogger.action(mContext, MetricsEvent.ACTION_SYSTEM_NAVIGATION_KEY_UP);
+        final boolean needsAxisInversion = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_needsFingerprintAxisInversion);
+        final boolean isRotated = (mDisplay.getRotation() == Surface.ROTATION_90
+                || mDisplay.getRotation() == Surface.ROTATION_270) && needsAxisInversion;
+        if (key ==  (!isRotated ? KeyEvent.KEYCODE_SYSTEM_NAVIGATION_UP
+                : KeyEvent.KEYCODE_SYSTEM_NAVIGATION_DOWN)) {
+            MetricsLogger.action(mContext, !isRotated ? MetricsEvent.ACTION_SYSTEM_NAVIGATION_KEY_UP
+                    : MetricsEvent.ACTION_SYSTEM_NAVIGATION_KEY_DOWN);
             mNotificationPanel.collapse(false /* delayed */, 1.0f /* speedUpFactor */);
-        } else if (KeyEvent.KEYCODE_SYSTEM_NAVIGATION_DOWN == key) {
-            MetricsLogger.action(mContext, MetricsEvent.ACTION_SYSTEM_NAVIGATION_KEY_DOWN);
+        } else if (key ==  (!isRotated ? KeyEvent.KEYCODE_SYSTEM_NAVIGATION_DOWN
+                : KeyEvent.KEYCODE_SYSTEM_NAVIGATION_UP)) {
+            MetricsLogger.action(mContext, !isRotated ? MetricsEvent.ACTION_SYSTEM_NAVIGATION_KEY_DOWN
+                    : MetricsEvent.ACTION_SYSTEM_NAVIGATION_KEY_DOWN);
             if (mNotificationPanel.isFullyCollapsed()) {
-                mNotificationPanel.expand(true /* animate */);
-                MetricsLogger.count(mContext, NotificationPanelView.COUNTER_PANEL_OPEN, 1);
+                if (mFingerprintQuickPulldown) {
+                    mNotificationPanel.expandWithQs();
+                    MetricsLogger.count(mContext, NotificationPanelView.COUNTER_PANEL_OPEN_QS, 1);
+                } else {
+                    mNotificationPanel.expand(true /* animate */);
+                    MetricsLogger.count(mContext, NotificationPanelView.COUNTER_PANEL_OPEN, 1);
+                }
             } else if (!mNotificationPanel.isInSettings() && !mNotificationPanel.isExpanding()){
                 mNotificationPanel.flingSettings(0 /* velocity */, true /* expand */);
                 MetricsLogger.count(mContext, NotificationPanelView.COUNTER_PANEL_OPEN_QS, 1);
             }
         }
-
     }
 
     boolean panelsEnabled() {

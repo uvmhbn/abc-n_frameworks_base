@@ -3694,6 +3694,12 @@ public final class Settings {
          */
 
         /**
+         * Whether or not to allow quick settings expansion with one swipe on the fingerprint sensor.
+         * @hide
+         */
+        public static final String STATUS_BAR_QUICK_QS_PULLDOWN_FP = "status_bar_quick_qs_pulldown_fp";
+
+        /**
          * Show or hide clock
          * 0 - hide
          * 1 - show (default)
@@ -4123,10 +4129,28 @@ public final class Settings {
         public static final String SLIM_RECENTS_ICON_PACK = "slim_recents_icon_pack";
 
         /**
+         * Wheter to use corner radius for Slim Recents cards
+         * @hide
+         */
+        public static final String SLIM_RECENTS_CORNER_RADIUS = "slim_recents_corner_radius";
+
+        /**
          * Whether to show QS footer warnings
          * @hide
          */
         public static final String QS_FOOTER_WARNINGS = "qs_footer_warnings";
+
+        /**
+         * Custom brightness value for Ambient Display
+         * @hide
+         */
+        public static final String AMBIENT_DOZE_CUSTOM_BRIGHTNESS = "ambient_doze_custom_brightness";
+
+        /**
+         * Use latest screen-on brightness value for Ambient Display
+         * @hide
+         */
+        public static final String AMBIENT_DOZE_AUTO_BRIGHTNESS = "ambient_doze_auto_brightness";
 
         /**
          * Whether to launch default music player when headset plugged in
