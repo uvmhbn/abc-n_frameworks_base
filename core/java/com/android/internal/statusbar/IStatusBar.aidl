@@ -99,6 +99,7 @@ oneway interface IStatusBar
     void screenPinningStateChanged(boolean enabled);
     void restartUI();
     void leftInLandscapeChanged(boolean isLeft);
+    void toggleFlashlight();
 
     /**
      * Notifies the status bar that a camera launch gesture has been detected.
