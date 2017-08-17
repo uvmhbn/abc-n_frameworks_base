@@ -77,4 +77,5 @@ interface IStatusBarService
     void screenPinningStateChanged(boolean enabled);
     void restartUI();
     void leftInLandscapeChanged(boolean isLeft);
+    void toggleFlashlight();
 }
