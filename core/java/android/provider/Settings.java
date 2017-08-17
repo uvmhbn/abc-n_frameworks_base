@@ -3446,11 +3446,17 @@ public final class Settings {
          */
         public static final String BATTERY_LIGHT_FULL_COLOR = "battery_light_full_color";
 
-	/**
+        /**
          * What color to use for the battery LED while charging - really full (100%)
          * @hide
          */
         public static final String BATTERY_LIGHT_REALLY_FULL_COLOR = "battery_light_really_full_color";
+
+        /**
+         * Whether to show battery light when DND mode is active
+         * @hide
+         */
+        public static final String BATTERY_LIGHT_ALLOW_ON_DND = "battery_light_allow_on_dnd";
 
         /**
          * Show pointer location on screen?
@@ -3958,24 +3964,6 @@ public final class Settings {
         public static final String PROXIMITY_AUTO_SPEAKER_DELAY = "proximity_auto_speaker_delay";
 
         /**
-         * Whether the phone vibrates on call connect
-         * @hide
-         */
-        public static final String VIBRATE_ON_CONNECT = "vibrate_on_connect";
-
-        /**
-         * Whether the phone vibrates on call waiting
-         * @hide
-         */
-        public static final String VIBRATE_ON_CALLWAITING = "vibrate_on_callwaiting";
-
-        /**
-         * Whether the phone vibrates on disconnect
-         * @hide
-         */
-        public static final String VIBRATE_ON_DISCONNECT = "vibrate_on_disconnect";
-
-        /**
          * Whether the proximity sensor will adjust call to speaker,
          * only while in call (not while ringing on outgoing call)
          * @hide
@@ -4169,6 +4157,15 @@ public final class Settings {
          * @hide
          */
         public static final String NO_NAVIGATION_NOTIFICATION = "no_navigation_notification";
+
+        /**
+         * Whether to answer or silence an incoming call with a swipe action on fingerprint scanner
+         * 0 = don't do anything (default)
+         * 1 = answer call with both swipe up and swipe down actions
+         * 2 = swipe up to answer, swipe down to silence the call
+         * @hide
+         */
+        public static final String FP_SWIPE_CALL_ACTIONS = "fp_swipe_call_actions";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
@@ -5678,6 +5675,21 @@ public final class Settings {
         public static final String PULSE_CUSTOM_BUTTONS_OPACITY = "pulse_custom_buttons_opacity";
 
         /**
+         * Long press delay for smartbar buttons
+         * @hide
+         * 0: Default (fast)
+         * 1: Normal delay
+         * 2: Long delay
+         */
+        public static final String SMARTBAR_LONGPRESS_DELAY = "smartbar_longpress_delay";
+
+        /**
+         * Scaling value for smartbar custom button icon
+         * @hide
+         */
+        public static final String SMARTBAR_CUSTOM_ICON_SIZE = "smartbar_custom_icon_size";
+
+        /**
          * A flag containing settings used for biometric weak
          * @hide
          */
@@ -6837,22 +6849,14 @@ public final class Settings {
         public static final String DOZE_ENABLED = "doze_enabled";
 
         /**
-         * Low brightness level for the advanced night mode tile
+         * Whether to set a lower brightness level when enabling night mode
+         * 0: Disabled
+         * 1: Set the brightness to a very low value
+         * 2: Set the brightness to a low value
+         * 3: Set the brightness to a medium value
          * @hide
          */
-        public static final String QS_NIGHT_BRIGHTNESS_VALUE = "qs_night_brightness_value";
-
-        /**
-         * Allows to store the custom user auto brightness value
-         * @hide
-         */
-        public static final String NIGHT_AUTOBRIGHTNESS_USERVALUE = "night_autobrightness_uservalue";
-
-        /**
-         * Allows to store the custom user manual brightness value
-         * @hide
-         */
-        public static final String NIGHT_MANBRIGHTNESS_USERVALUE = "night_manbrightness_uservalue";
+        public static final String NIGHT_BRIGHTNESS_VALUE = "night_brightness_value";
 
         /**
          * Whether the device should pulse on pick up gesture.
